@@ -8,13 +8,19 @@ import streamlit_authenticator as stauth
 import os
 import hashlib
 
+import firebase_admin
+from firebase_admin import credentials, firestore
+
 @st.cache_resource
 def init_firestore():
-    firebase_config = st.secrets["firebase"]
+    firebase_config = dict(st.secrets["firebase"])  # convert from Config to dict
     cred = credentials.Certificate(firebase_config)
     if not firebase_admin._apps:
         firebase_admin.initialize_app(cred)
     return firestore.client()
+
+db = init_firestore()
+
 
 db = init_firestore()
 
